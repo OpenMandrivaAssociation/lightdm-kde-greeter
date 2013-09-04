@@ -1,2 +1,4 @@
+removed_sources:
+  lightdm-kde-0.3.0.tar.bz2: 8b8a832cc8a91d2672bdf1f2b78009792cce04af
 sources:
-  "lightdm-kde-0.3.0.tar.bz2": 8b8a832cc8a91d2672bdf1f2b78009792cce04af
+  lightdm-kde-0.3.2.1.tar.bz2: 504880484f43e01b5189082856aab63acd51816d
