@@ -1,7 +1,7 @@
 Summary:	LightDM KDE Greeter
 Name:		lightdm-kde-greeter
 Version:	0.3.2.1
-Release:	6
+Release:	5.1
 Group:		System/X11
 License:	GPLv3+
 URL:	 	https://projects.kde.org/projects/playground/base/lightdm
