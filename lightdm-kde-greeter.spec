@@ -1,11 +1,12 @@
 Summary:	LightDM KDE Greeter
 Name:		lightdm-kde-greeter
 Version:	0.3.2.1
-Release:	5
+Release:	6
 Group:		System/X11
 License:	GPLv3+
 URL:	 	https://projects.kde.org/projects/playground/base/lightdm
 Source0: 	http://carroll.aset.psu.edu/pub/kde/unstable/lightdm-kde/src/lightdm-kde-%{version}.tar.bz2
+Source1:	lightdm-kde-greeter.conf
 Patch0:		lightdm-kde-0.3.2.1-lightdm-1.7.patch
 
 BuildRequires:	gettext
@@ -31,6 +32,8 @@ A LightDM greeter that uses the KDE toolkit.
 
 %install
 %makeinstall_std -C build
+mkdir -p %{buildroot}%{_sysconfdir}/lightdm
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/lightdm/lightdm-kde-greeter.conf
 
 %find_lang %{name} --all-name --with-kde
 
@@ -50,6 +53,7 @@ fi
 
 %files -f %{name}.lang
 %{_sysconfdir}/dbus-1/system.d/org.kde.kcontrol.kcmlightdm.conf
+%config(noreplace) %{_sysconfdir}/lightdm/lightdm-kde-greeter.conf
 %{_kde_libdir}/kde4/kcm_lightdm.so
 %{_kde_libdir}/kde4/libexec/kcmlightdmhelper
 %{_kde_libdir}/kde4/libexec/lightdm-kde-greeter-rootimage
