@@ -24,7 +24,7 @@ A LightDM greeter that uses the KDE toolkit.
 
 %prep
 %setup -qn lightdm-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 %cmake_kde4
