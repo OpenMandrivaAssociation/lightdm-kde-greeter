@@ -67,31 +67,38 @@ export CXX=g++
 mkdir -p %{buildroot}%{_sysconfdir}/lightdm
 install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/lightdm/lightdm-kde-greeter.conf
 
-%find_lang %{name} --all-name --with-kde
+%find_lang kcm_lightdm           --with-kde
+%find_lang lightdm_kde_greeter   --with-kde
+%find_lang lightdm_theme_userbar --with-kde
+
+# FIXME: why does it installs to the wrong dir
+mv %buildroot/%name %buildroot%_datadir/
+mkdir -p %buildroot%_sharedstatedir/%name
 
 %post
-%{_sbindir}/update-alternatives \
-	--install %{_datadir}/xgreeters/lightdm-greeter.desktop \
-	lightdm-greeter \
-	%{_datadir}/xgreeters/lightdm-kde-greeter.desktop \
-	10
+%systemd_user_post %name-wifikeeper.service
+
+%preun
+%systemd_user_preun %name-wifikeeper.service
 
 %postun
-if [ $1 -eq 0 ]; then
-%{_sbindir}/update-alternatives \
-	--remove lightdm-greeter \
-	%{_datadir}/xgreeters/lightdm-kde-greeter.desktop
-fi
+%systemd_user_postun_with_restart %name-wifikeeper.service
 
-%files -f %{name}.lang
-%{_sysconfdir}/dbus-1/system.d/org.kde.kcontrol.kcmlightdm.conf
-%config(noreplace) %{_sysconfdir}/lightdm/lightdm-kde-greeter.conf
-%{_kde_libdir}/kde4/kcm_lightdm.so
-%{_kde_libdir}/kde4/libexec/kcmlightdmhelper
-%{_kde_libdir}/kde4/libexec/lightdm-kde-greeter-rootimage
-%{_sbindir}/lightdm-kde-greeter
-%{_datadir}/apps/lightdm-kde-greeter
-%{_datadir}/dbus-1/system-services/org.kde.kcontrol.kcmlightdm.service
-%{_datadir}/kde4/services/kcm_lightdm.desktop
-%{_datadir}/polkit-1/actions/org.kde.kcontrol.kcmlightdm.policy
-%{_datadir}/xgreeters/lightdm-kde-greeter.desktop
+
+%files -f kcm_lightdm.lang -f lightdm_kde_greeter.lang -f lightdm_theme_userbar.lang
+%doc README.md
+%license COPYING.GPL3
+%config(noreplace) %_sysconfdir/lightdm/%name.conf
+%dir %_sharedstatedir/%name
+%_bindir/%name
+%_bindir/lightdm-kde-greeter-rootimage
+%_bindir/lightdm-kde-greeter-wifikeeper
+%_datadir/applications/kcm_lightdm.desktop
+%_datadir/dbus-1/system-services/org.kde.kcontrol.kcmlightdm.service
+%_datadir/dbus-1/system.d/org.kde.kcontrol.kcmlightdm.conf
+%_datadir/polkit-1/actions/org.kde.kcontrol.kcmlightdm.policy
+%_datadir/xgreeters/lightdm-kde-greeter.desktop
+%_datadir/%name/
+%_kf6_libexecdir/kauth/kcmlightdmhelper
+%_qt6_plugindir/plasma/kcms/systemsettings/kcm_lightdm.so
+%_userunitdir/lightdm-kde-greeter-wifikeeper.service
