@@ -49,6 +49,7 @@ A LightDM greeter that uses the KDE toolkit.
 
 %prep
 %autosetup -n lightdm-kde-greeter-v%{version} -p1
+sed 's/sbin/bin/' -i greeter/CMakeLists.txt
 
 %build
 export CC=gcc
@@ -90,7 +91,7 @@ mkdir -p %buildroot%_sharedstatedir/%name
 %license COPYING.GPL3
 %config(noreplace) %_sysconfdir/lightdm/%name.conf
 %dir %_sharedstatedir/%name
-#_bindir/%name
+%_bindir/%name
 %_bindir/lightdm-kde-greeter-rootimage
 %_bindir/lightdm-kde-greeter-wifikeeper
 %_datadir/applications/kcm_lightdm.desktop
@@ -99,6 +100,6 @@ mkdir -p %buildroot%_sharedstatedir/%name
 %_datadir/polkit-1/actions/org.kde.kcontrol.kcmlightdm.policy
 %_datadir/xgreeters/lightdm-kde-greeter.desktop
 %_datadir/%name/
-#_kf6_libexecdir/kauth/kcmlightdmhelper
-#_qt6_plugindir/plasma/kcms/systemsettings/kcm_lightdm.so
+%{_libdir}/libexec/kf6/kauth/kcmlightdmhelper
+%{_libdir}/qt6/plugins/plasma/kcms/systemsettings/kcm_lightdm.so
 %_userunitdir/lightdm-kde-greeter-wifikeeper.service
