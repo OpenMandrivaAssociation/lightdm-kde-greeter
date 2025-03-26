@@ -1,3 +1,5 @@
+%global optflags %{optflags} -Wno-error -Wno-keyword-macro
+
 Summary:	LightDM KDE Greeter
 Name:		lightdm-kde-greeter
 Version:	6.0.2
