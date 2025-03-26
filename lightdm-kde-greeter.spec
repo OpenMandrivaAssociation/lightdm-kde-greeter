@@ -51,6 +51,8 @@ A LightDM greeter that uses the KDE toolkit.
 %autosetup -n lightdm-kde-greeter-v%{version} -p1
 
 %build
+export CC=gcc
+export CXX=g++
 %cmake \
 	-DGREETER_WAYLAND_SESSIONS_FIRST=ON \
 	-DGREETER_IMAGES_DIR=%_datadir/%name/images \
