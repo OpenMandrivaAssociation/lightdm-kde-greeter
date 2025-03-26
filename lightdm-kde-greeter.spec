@@ -1,37 +1,51 @@
 Summary:	LightDM KDE Greeter
 Name:		lightdm-kde-greeter
-Version:	0.3.2.1
-Release:	7
+Version:	6.0.2
+Release:	1
 Group:		System/X11
 License:	GPLv3+
 URL:	 	https://projects.kde.org/projects/playground/base/lightdm
-Source0: 	http://carroll.aset.psu.edu/pub/kde/unstable/lightdm-kde/src/lightdm-kde-%{version}.tar.bz2
+Source0: 	https://invent.kde.org/plasma/lightdm-kde-greeter/-/archive/v%{version}/lightdm-kde-greeter-v%{version}.tar.bz2
 Source1:	lightdm-kde-greeter.conf
-Patch0:		lightdm-kde-0.3.2.1-lightdm-1.7.patch
 
 BuildRequires:	gettext
 BuildRequires:	intltool
-BuildRequires:	kdelibs4-devel
-BuildRequires:	pkgconfig(liblightdm-qt-3)
+BuildRequires:	pkgconfig(liblightdm-qt5-3)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6ShaderTools)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6NetworkManagerQt)
+BuildRequires:  cmake(plasmaquick)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(liblightdm-gobject-1)
 
 Provides:	lightdm-greeter
 Requires:	lightdm
-Requires:	kdebase4-runtime
 Requires(post,postun):	update-alternatives
 
 %description
 A LightDM greeter that uses the KDE toolkit.
 
 %prep
-%setup -qn lightdm-%{version}
-%autopatch -p1
+%autosetup -n lightdm-%{version} -p1
 
 %build
-%cmake_kde4
-%make
+%cmake_kf6 \
+	-DGREETER_WAYLAND_SESSIONS_FIRST=ON \
+	-DGREETER_IMAGES_DIR=%_datadir/%name/images \
+	-DBUILD_TESTING=OFF
+%make_build
+
 
 %install
-%makeinstall_std -C build
+%make_install -C build
+
 mkdir -p %{buildroot}%{_sysconfdir}/lightdm
 install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/lightdm/lightdm-kde-greeter.conf
 
