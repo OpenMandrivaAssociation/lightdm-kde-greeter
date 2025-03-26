@@ -33,7 +33,7 @@ Requires(post,postun):	update-alternatives
 A LightDM greeter that uses the KDE toolkit.
 
 %prep
-%autosetup -n lightdm-%{version} -p1
+%autosetup -n lightdm-kde-greeter-%{version} -p1
 
 %build
 %cmake_kf6 \
